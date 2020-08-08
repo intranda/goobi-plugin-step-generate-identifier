@@ -12,10 +12,12 @@
         <project>*</project>
         <step>*</step>
         
-        <!-- sample parameter -->
-        <value>test</value>
-        <!-- display button to finish the task directly from within the entered plugin -->
-        <allowTaskFinishButtons>true</allowTaskFinishButtons>
+        <!-- into which field shall the new identifier be written -->
+        <field>CatalogIDDigital</field>
+        <!-- how long shall the new identifier be -->
+        <length>9</length>
+        <!-- overwrite existing value if it exists already -->
+        <overwrite>true</overwrite>
     </config>
 
 </config_plugin>
