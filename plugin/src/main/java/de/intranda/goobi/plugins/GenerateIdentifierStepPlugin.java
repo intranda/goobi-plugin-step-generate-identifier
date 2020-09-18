@@ -23,6 +23,7 @@ import java.io.IOException;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.commons.configuration.SubnodeConfiguration;
@@ -57,6 +58,7 @@ public class GenerateIdentifierStepPlugin implements IStepPluginVersion2 {
     private String title = "intranda_step_generateIdentifier";
     @Getter
     private Step step;
+    private String type;
     private String field;
     private int length;
     private String returnPath;
@@ -70,6 +72,7 @@ public class GenerateIdentifierStepPlugin implements IStepPluginVersion2 {
         // read parameters from correct block in configuration file
         SubnodeConfiguration myconfig = ConfigPlugins.getProjectAndStepConfig(title, step);
         field = myconfig.getString("field", "CatalogIDDigital"); 
+        type = myconfig.getString("type", "uuid"); 
         length = myconfig.getInt("length", 9);
         overwrite = myconfig.getBoolean("overwrite", false);
         log.info("GenerateIdentifier step plugin initialized");
@@ -120,14 +123,33 @@ public class GenerateIdentifierStepPlugin implements IStepPluginVersion2 {
     public PluginReturnValue run() {
         boolean successfull = true;
         
-        // generate a new number
-        String myId = String.valueOf(ThreadLocalRandom.current().nextInt(1, 999999999 + 1));
-        // shorten it, if it is too long
-        if (myId.length()> length) {
-            myId = myId.substring(0,length);
-        }
-        // fill it with zeros if it is too short
-        myId = StringUtils.leftPad(myId, length, "0");
+        String myId = "";
+        
+        switch (type.toLowerCase()) {
+		
+    	case "random":
+    		// generate a new number
+            myId = String.valueOf(ThreadLocalRandom.current().nextInt(1, 999999999 + 1));
+            // shorten it, if it is too long
+            if (myId.length()> length) {
+                myId = myId.substring(0,length);
+            }
+            // fill it with zeros if it is too short
+            myId = StringUtils.leftPad(myId, length, "0");
+			break;
+
+		case "timestamp":
+			// timestamp
+			long time = System.currentTimeMillis();
+			myId = Long.toString(time);
+			break;
+			
+		default:
+			// uuid
+			UUID uuid = UUID.randomUUID();
+			myId = uuid.toString();
+			break;
+		}
         
         try {
             // read the mets file
@@ -170,7 +192,5 @@ public class GenerateIdentifierStepPlugin implements IStepPluginVersion2 {
         }
         return PluginReturnValue.FINISH;
     }
-    
-    
    
 }

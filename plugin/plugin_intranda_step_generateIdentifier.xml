@@ -14,7 +14,9 @@
         
         <!-- into which field shall the new identifier be written -->
         <field>CatalogIDDigital</field>
-        <!-- how long shall the new identifier be -->
+        <!-- which type of identifier shall be created? Possible values are random, timestamp, uuid -->
+        <type>uuid</type>
+        <!-- how long shall the new identifier be if it is a numeric one (just in case the type is set to 'random' -->
         <length>9</length>
         <!-- overwrite existing value if it exists already -->
         <overwrite>true</overwrite>
