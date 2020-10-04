@@ -2,21 +2,21 @@
 
 <img src="https://goobi.io/wp-content/uploads/logo_goobi_plugin.png" align="right" style="margin:0 0 20px 20px;" alt="Plugin for Goobi workflow" width="175" height="109">
 
-This is the GenerateIdentifier Goobi step plugin. A description for this plugin is still missing.
+This step plugin allows you to generate configurable identifiers and save them within a metadata in the METS file.
 
 This is a plugin for Goobi workflow, the open source workflow tracking software for digitisation projects. More information about Goobi workflow is available under https://goobi.io. If you want to get in touch with the user community simply go to https://community.goobi.io.
 
 ## Plugin details
 
-More information about the functionality of this plugin and the complete documentation can be found in the central documentation area at https://docs.intranda.com
+More information about the functionality of this plugin and the complete documentation can be found in the central documentation area at https://docs.goobi.io
 
 Detail | Description
 --- | ---
 **Plugin identifier**       | intranda_step_generateIdentifier
 **Plugin type**             | Step plugin
 **Licence**                 | GPL 2.0 or newer    
-**Documentation (German)**  | - no documentation available -
-**Documentation (English)** | - no documentation available -
+**Documentation (German)**  | https://docs.goobi.io/goobi-workflow-plugins-de/step/intranda_step_generateidentifier 
+**Documentation (English)** | https://docs.goobi.io/goobi-workflow-plugins-en/step/intranda_step_generateidentifier 
 
 ## Goobi details
 
