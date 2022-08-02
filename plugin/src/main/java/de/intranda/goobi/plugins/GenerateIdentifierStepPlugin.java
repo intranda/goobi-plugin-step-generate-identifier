@@ -36,7 +36,6 @@ import org.goobi.production.enums.StepReturnValue;
 import org.goobi.production.plugin.interfaces.IStepPluginVersion2;
 
 import de.sub.goobi.config.ConfigPlugins;
-import de.sub.goobi.helper.exceptions.DAOException;
 import de.sub.goobi.helper.exceptions.SwapException;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
@@ -53,7 +52,7 @@ import ugh.exceptions.WriteException;
 @PluginImplementation
 @Log4j2
 public class GenerateIdentifierStepPlugin implements IStepPluginVersion2 {
-    
+
     @Getter
     private String title = "intranda_step_generateIdentifier";
     @Getter
@@ -68,11 +67,11 @@ public class GenerateIdentifierStepPlugin implements IStepPluginVersion2 {
     public void initialize(Step step, String returnPath) {
         this.returnPath = returnPath;
         this.step = step;
-                
+
         // read parameters from correct block in configuration file
         SubnodeConfiguration myconfig = ConfigPlugins.getProjectAndStepConfig(title, step);
-        field = myconfig.getString("field", "CatalogIDDigital"); 
-        type = myconfig.getString("type", "uuid"); 
+        field = myconfig.getString("field", "CatalogIDDigital");
+        type = myconfig.getString("type", "uuid");
         length = myconfig.getInt("length", 9);
         overwrite = myconfig.getBoolean("overwrite", false);
         log.info("GenerateIdentifier step plugin initialized");
@@ -102,7 +101,7 @@ public class GenerateIdentifierStepPlugin implements IStepPluginVersion2 {
     public String finish() {
         return "/uii" + returnPath;
     }
-    
+
     @Override
     public int getInterfaceVersion() {
         return 0;
@@ -112,7 +111,7 @@ public class GenerateIdentifierStepPlugin implements IStepPluginVersion2 {
     public HashMap<String, StepReturnValue> validate() {
         return null;
     }
-    
+
     @Override
     public boolean execute() {
         PluginReturnValue ret = run();
@@ -122,35 +121,35 @@ public class GenerateIdentifierStepPlugin implements IStepPluginVersion2 {
     @Override
     public PluginReturnValue run() {
         boolean successfull = true;
-        
-        String myId = "";
-        
-        switch (type.toLowerCase()) {
-		
-    	case "random":
-    		// generate a new number
-            myId = String.valueOf(ThreadLocalRandom.current().nextInt(1, 999999999 + 1));
-            // shorten it, if it is too long
-            if (myId.length()> length) {
-                myId = myId.substring(0,length);
-            }
-            // fill it with zeros if it is too short
-            myId = StringUtils.leftPad(myId, length, "0");
-			break;
 
-		case "timestamp":
-			// timestamp
-			long time = System.currentTimeMillis();
-			myId = Long.toString(time);
-			break;
-			
-		default:
-			// uuid
-			UUID uuid = UUID.randomUUID();
-			myId = uuid.toString();
-			break;
-		}
-        
+        String myId = "";
+
+        switch (type.toLowerCase()) {
+
+            case "random":
+                // generate a new number
+                myId = String.valueOf(ThreadLocalRandom.current().nextInt(1, 999999999 + 1));
+                // shorten it, if it is too long
+                if (myId.length() > length) {
+                    myId = myId.substring(0, length);
+                }
+                // fill it with zeros if it is too short
+                myId = StringUtils.leftPad(myId, length, "0");
+                break;
+
+            case "timestamp":
+                // timestamp
+                long time = System.currentTimeMillis();
+                myId = Long.toString(time);
+                break;
+
+            default:
+                // uuid
+                UUID uuid = UUID.randomUUID();
+                myId = uuid.toString();
+                break;
+        }
+
         try {
             // read the mets file
             Fileformat ff = step.getProzess().readMetadataFile();
@@ -158,10 +157,10 @@ public class GenerateIdentifierStepPlugin implements IStepPluginVersion2 {
             if (logical.getType().isAnchor()) {
                 logical = logical.getAllChildren().get(0);
             }
-            
+
             // find the correct metadata type
             MetadataType mdt = step.getProzess().getRegelsatz().getPreferences().getMetadataTypeByName(field);
-            
+
             // update existing metadata of the given field if they exist
             if (mdt != null) {
                 List<? extends Metadata> mdl = logical.getAllMetadataByType(mdt);
@@ -175,13 +174,13 @@ public class GenerateIdentifierStepPlugin implements IStepPluginVersion2 {
                     // create new metadata
                     Metadata m = new Metadata(mdt);
                     m.setValue(myId);
-                    logical.addMetadata(m);                
+                    logical.addMetadata(m);
                 }
             }
-            
+
             // save the mets file again
             step.getProzess().writeMetadataFile(ff);
-        } catch (ReadException | PreferencesException | SwapException | DAOException | WriteException | IOException | InterruptedException | MetadataTypeNotAllowedException e) {
+        } catch (ReadException | PreferencesException | SwapException | WriteException | IOException | MetadataTypeNotAllowedException e) {
             log.error("Error while generating new metadata inside of GenerateIdentifier step plugin", e);
             successfull = false;
         }
@@ -192,5 +191,5 @@ public class GenerateIdentifierStepPlugin implements IStepPluginVersion2 {
         }
         return PluginReturnValue.FINISH;
     }
-   
+
 }
