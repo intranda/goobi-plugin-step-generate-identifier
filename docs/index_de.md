@@ -3,6 +3,10 @@ title: Identifier generieren
 identifier: intranda_step_generateIdentifier
 published: true
 description: Dieses Step Plugin erlaubt die Generierung von konfigurierbaren Identifiern und das Speichern innerhalb eines Metadatums in der METS-Datei.
+keywords:
+    - Goobi workflow
+    - Plugin
+    - Step Plugin
 ---
 ## Einführung
 Das Plugin erlaubt eine automatische Generierung von Identifiern und das Speichern innerhalb eines Metadatums in der METS-Datei des entsprechenden Vorgangs.
