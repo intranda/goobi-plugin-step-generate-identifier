@@ -43,7 +43,7 @@ The configuration of the plugin is structured as follows:
 <config_plugin>
 
     <config>
-        <!-- which projects to use for (can be more then one, otherwise use *) -->
+        <!-- which projects to use for (can be more than one, otherwise use *) -->
         <project>*</project>
         <step>*</step>
 
